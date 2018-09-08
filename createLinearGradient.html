@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <canvas id="canvas" width="500" height="600">
+    您的浏览器不支持 HTML5 canvas 标签。
+  </canvas>
+  <script>
+    var canvas = document.querySelector('#canvas')
+    var ctx = canvas.getContext('2d')
+    var g = ctx.createLinearGradient(0, 0, 100, 0)
+    g.addColorStop(0, 'red')
+    g.addColorStop(1, 'white')
+    ctx.fillStyle = g
+    ctx.fillRect(0, 0, 100, 50)
+  </script>
+</body>
+</html>
