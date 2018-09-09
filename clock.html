@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+    canvas {
+        display: block;
+        /* margin: 200px auto; */
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="600" height="600">
+    您的浏览器不支持 HTML5 canvas 标签。
+  </canvas>
+  <script>
+    var canvas = document.querySelector('#canvas')
+    var ctx = canvas.getContext('2d')
+
+    let width = canvas.width
+    let height = canvas.height
+
+    let rem = width / 200
+
+    let pi = Math.PI
+
+    // 获取了 canvas 元素的宽高，同时定义半径 r 为最大的半径，即宽度的一半。
+
+    let r = width / 2
+    console.log(width, height)
+    console.log(r)
+
+    
+    // /*绘制表盘*/
+    //  x = r * cos(角度) 
+    // y = r * sin(角度)
+    // 由于 Math 对象里面的 sin() 和 cos() 方法使用的是弧度，所以需要进行转换
+    // 弧度＝度×π/180
+    function drawDial (ctx) {
+      // 重置原点
+      ctx.save()
+
+      ctx.translate(r, r) //一定坐标原点到原来的中心
+      ctx.beginPath()
+      ctx.arc(0, 0, r - 5 * rem, 0, 2 * pi, true) //绘制圆周
+      ctx.lineWidth = 8 * rem
+      ctx.stroke()
+      ctx.closePath()
+
+      // 画小时数
+      let hour = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, ]
+      hour.forEach((item, i) => {
+        let rad = 2 * pi / 12 * i
+        let y = Math.sin(rad) * (r - 30 * rem)
+        let x = Math.cos(rad) * (r - 30 * rem)
+        ctx.font = '18px sans-serif'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.fillText(item, x, y)
+      })
+
+      // 画刻度
+      for (let i = 0; i < 60; i++) {
+        let rad = 2 * pi / 60 * i
+        let y = Math.sin(rad) * (r - 18 * rem)
+        let x = Math.cos(rad) * (r - 18 * rem)
+        ctx.beginPath()
+        ctx.fillStyle = i % 5 === 0 ? "#000" : "#bbb"
+        ctx.arc(x, y, 2 * rem, 0 , 2 * pi, true)
+        ctx.fill()
+      }
+    }
+
+
+
+     // 画时针
+     function drawHour (hour, minute) {
+       ctx.save()
+       let rad = 2 * pi * (hour + minute / 60) / 12
+       ctx.beginPath()
+       ctx.rotate(rad)
+       ctx.moveTo(0, 15 * rem)
+       ctx.lineTo(0, -r/2)
+       ctx.lineWidth = 5 * rem
+       ctx.lineCap = 'round'
+       ctx.stroke()
+       ctx.restore()
+     }
+     
+     /*绘制分针*/
+     function drawMinute (minute, second) {
+       ctx.save()
+       let rad = 2 * pi * (minute + second / 60) / 60
+       ctx.rotate(rad)
+       ctx.beginPath()
+       ctx.moveTo(0, 18 * rem)
+       ctx.lineTo(0, -r + 40)
+       ctx.lineWidth = 3 * rem
+       ctx.lineCap = 'round'
+       ctx.stroke()
+       ctx.restore()
+     }
+
+     /*绘制秒针*/
+     function drawSecond (second) {
+       ctx.save()
+       let rad = 2 * pi * second / 60
+       ctx.rotate(rad)
+       ctx.beginPath()
+       ctx.moveTo(2 * rem, 25 * rem)
+       ctx.lineTo(-2 * rem, 25 * rem)
+       ctx.lineTo(-1 * rem, -r + 25)
+       ctx.lineTo(1*rem, -r + 25)
+       ctx.closePath()
+       ctx.lineWidth = 1 * rem
+       ctx.fillStyle = '#f00'
+       ctx.fill()
+       ctx.restore()
+     }
+
+     function drawDot () {
+       ctx.beginPath()
+       ctx.arc(0, 0, 4 * rem, 0, 2 * pi,true) // 顺时针
+       ctx.fillStyle = '#fff'
+       ctx.fill()
+     }
+
+
+
+     
+
+     function draw(ctx){
+        setTimeout(function step(){
+          ctx.clearRect(0, 0, width, height)
+          drawDial(ctx) //绘制表盘
+          var now = new Date();
+          var hour = now.getHours();
+          var minute = now.getMinutes();
+          var second = now.getSeconds();
+          console.log(hour, minute, second)
+          drawHour(hour,minute);
+          drawMinute(minute, second);
+          drawSecond(second);
+          drawDot();
+          ctx.restore()
+          setTimeout(step, 1000);
+        }, 1000);
+    }
+    
+
+    draw(ctx)
+    
+    
+  </script>
+</body>
+</html>

@@ -29,12 +29,12 @@
     // /*绘制表盘*/
     function drawDial (ctx) {
       let pi = Math.PI
-      ctx.clearRect(0, 0, 600, 600)
+      ctx.clearRect(0, 0, 600, 600) //清除所有内容
       ctx.save()
 
-      ctx.translate(300, 300)
+      ctx.translate(300, 300) //一定坐标原点到原来的中心
       ctx.beginPath()
-      ctx.arc(0, 0, 296, 0, 2 * pi)
+      ctx.arc(0, 0, 296, 0, 2 * pi) //绘制圆周
       ctx.stroke()
       ctx.closePath()
 
@@ -67,11 +67,11 @@
      function drawHand(angle, len, width, color, ctx) {
        let pi = Math.PI
        ctx.save()
-       ctx.translate(300, 300)
-       ctx.rotate(-pi/2 + angle)
+       ctx.translate(300, 300) //把坐标轴的远点平移到原来的中心
+       ctx.rotate(-pi/2 + angle) //旋转坐标轴。 x轴就是针的角度
        ctx.beginPath()
        ctx.moveTo(-40, 0)
-       ctx.lineTo(len, 0)
+       ctx.lineTo(len, 0) // 沿着x轴绘制针
        ctx.lineWidth = width
        ctx.strokeStyle = color
        ctx.lineCap = 'round'
@@ -90,9 +90,9 @@
 
        let pi = Math.PI
 
-       let secondAngle = 2 * pi * s / 60
-       let minuteAngle = 2 * pi * (m + s / 60) / 60
-       let hourAngle = 2 * pi * (h + m / 60) / 12
+       let secondAngle = 2 * pi * s / 60 //计算出来s针的弧度
+       let minuteAngle = 2 * pi * (m + s / 60) / 60 //计算出来分针的弧度
+       let hourAngle = 2 * pi * (h + m / 60) / 12 //计算出来时针的弧度
 
       drawHand(hourAngle, 160, 10, "red", ctx);  //绘制时针
       drawHand(minuteAngle, 200, 8, "green", ctx);  //绘制分针
@@ -101,8 +101,7 @@
 
      function draw(ctx){
         requestAnimationFrame(function step(){
-    
-          drawDial(ctx)
+            drawDial(ctx) //绘制表盘
             drawAllHands(ctx); //绘制时分秒针
             requestAnimationFrame(step);
         });

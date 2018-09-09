@@ -338,3 +338,4 @@ ctx.fillRect(10,10,150,80);
 
 - [学习HTML5 Canvas这一篇文章就够了](https://blog.csdn.net/u012468376/article/details/73350998)
 - [HTML5 <canvas> 参考手册](http://www.runoob.com/tags/ref-canvas.html)
+- [Canvas 画时钟](https://blog.csdn.net/destinytaoer/article/details/78682022)
