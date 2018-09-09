@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <canvas id="canvas" width="500" height="600">
+    您的浏览器不支持 HTML5 canvas 标签。
+  </canvas>
+  <script>
+    var canvas = document.querySelector('#canvas')
+    var ctx = canvas.getContext('2d')
+    ctx.beginPath();
+    ctx.moveTo(50, 50);
+    //参数1、2：控制点1坐标   参数3、4：控制点2坐标  参数4：圆弧半径
+    ctx.arcTo(200, 50, 200, 200, 100);
+    ctx.lineTo(200, 200)
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.fillStyle = 'orange'
+    ctx.rect(50, 50, 10, 10);
+    ctx.rect(200, 50, 10, 10)
+    ctx.rect(200, 200, 10, 10)
+    ctx.fill()
+
+//     这个方法可以这样理解。绘制的弧形是由两条切线所决定。
+
+// ​ 第 1 条切线：起始点和控制点1决定的直线。
+
+// ​ 第 2 条切线：控制点1 和控制点2决定的直线。
+    
+  </script>
+</body>
+</html>
