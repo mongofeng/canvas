@@ -76,6 +76,8 @@
         ctx.arc(x, y, 2 * rem, 0 , 2 * pi, true)
         ctx.fill()
       }
+
+      ctx.restore()
     }
 
 
@@ -140,6 +142,9 @@
         setTimeout(function step(){
           ctx.clearRect(0, 0, width, height)
           drawDial(ctx) //绘制表盘
+          // 重置原点
+          ctx.save()
+          ctx.translate(r, r) //一定坐标原点到原来的中心
           var now = new Date();
           var hour = now.getHours();
           var minute = now.getMinutes();
@@ -154,7 +159,6 @@
         }, 1000);
     }
     
-
     draw(ctx)
     
     
