@@ -139,7 +139,7 @@
      
 
      function draw(ctx){
-        setTimeout(function step(){
+        requestAnimationFrame(function step(){
           ctx.clearRect(0, 0, width, height)
           drawDial(ctx) //绘制表盘
           // 重置原点
@@ -155,8 +155,8 @@
           drawSecond(second);
           drawDot();
           ctx.restore()
-          setTimeout(step, 1000);
-        }, 1000);
+          requestAnimationFrame(step);
+        });
     }
     
     draw(ctx)
