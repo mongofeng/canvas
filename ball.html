@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<head>
+<title>canvas</title>
+<style>
+.canvas{
+   border: 1px solid #000;
+}
+</style>
+</head>
+<body>
+<canvas class="canvas" id="canvas" width="400px" height="400px"></canvas>
+<script>
+window.onload=function(){
+   var can=document.getElementById("canvas");
+   var cxt=can.getContext("2d");
+   var ball={
+      x:100,
+      y:100,
+      vx:4,
+      vy:2,
+      radius:20,
+      color:"blue",
+      draw:function(){
+        cxt.beginPath();
+        cxt.arc(this.x,this.y,this.radius,0,Math.PI*2,true);
+        cxt.closePath();
+        cxt.fillStyle=this.color;
+        cxt.fill();
+      }
+   };
+      
+   function draw(){
+       cxt.clearRect(0,0,canvas.width,canvas.height);
+       ball.draw();
+       ball.x+=ball.vx;
+       ball.y+=ball.vy;
+       if(ball.y - ball.radius < 0  || ball.y + ball.radius > canvas.height){
+           ball.vy=-ball.vy;
+       }
+       if(ball.x - ball.radius < 0  || ball.x + ball.radius > canvas.width){
+           ball.vx=-ball.vx;
+       }
+       window.requestAnimationFrame(draw);
+   };
+   
+   draw();
+   
+};
+</script>
+</body>
+</html>

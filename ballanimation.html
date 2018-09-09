@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+        }
+ 
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+ 
+<body>
+    <canvas class="bubble"></canvas>
+ 
+ 
+</body>
+<script>
+            /*
+            1.程序员能力:
+                1:语法，算法，api，基本规则的掌握
+                2.程序思维，项目逻辑
+            2.设置canvas元素和浏览器窗口高一致
+                2.1：获取canvas元素
+                2.2：获取浏览器窗口宽高
+                2.3：设置元素宽高
+                2.4：当浏览器窗口宽高发生变化时重新获取宽高并给canvas设置BOM
+            3.如何利用canvas绘制图形
+                3.1：获取canvas上的可绘制区域
+                3.2：拿起绘图的笔并且蘸上有颜色的墨
+                3.3：构思画什么图形
+                3.4：提笔作画
+            4：如何利用canvas绘制会动的图形
+                动画：会动的画
+            5.绘制1000个彩虹糖
+                5.1位置不一样
+                5.2颜色不一样
+                5.3大小不一样
+                5.4运动方向不一样
+            6.面向对象编程思想
+                6.1上帝思维
+                6.2构造函数=>创造一个球的对象
+            */
+    let canvas = document.querySelector(".bubble");
+    var w, h;
+    var aColor = ["#eb9019", "#ff6197", "#c7ffec", "#376956", "495a80","c3bdd4"];
+    var aBubble = [];//存放新生成的小球
+    ~~ function setSize() {
+        window.onresize = arguments.callee;
+        w = window.innerWidth;
+        h = window.innerHeight;
+        canvas.width = w;
+        canvas.height = h;
+        // canvas.style.background='blue'
+    }()
+    var canCon = canvas.getContext("2d"); //获取canvas上的可绘制区域
+    // canCon.fillStyle="red";
+    // canCon.arc(100,100,66,0,Math.PI*2);
+    // canCon.fill();
+ 
+    function random(min, max) { //得到一个min到max之间的随机值
+        return Math.random() * (max - min) + min;
+    }
+ 
+    function Bubble() {}; //构造函数
+    Bubble.prototype = {
+        init: function () { //基本配置
+            this.x = random(0, w); //小球x轴初始位置
+            this.y = random(0, h); //小球y轴初始位置
+            this.r = random(1, 4); //小球的半径范围
+            this.color = aColor[Math.floor(random(0, 6))];
+            this.vx = random(-1, 1);
+            this.vy = random(-1, 1);
+        },
+        draw: function () { //绘制小球
+            canCon.beginPath(); //把笔抬起来,beginPath() 方法开始一条路径，或重置当前的路径。
+            canCon.fillStyle = this.color;
+            canCon.arc(this.x, this.y, this.r, 0, Math.PI * 2); //圆心的位置,xy,半径,画圆
+            canCon.fill();
+        },
+        move: function () {
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x - this.r < 0 || this.x + this.r > w) {
+                this.vx = -this.vx
+            }
+            if (this.y - this.r < 0 || this.y + this.r > h) {
+                this.vy = -this.vy
+            }
+            this.draw();
+        }
+    }
+ 
+    function create(num) { //生出多少个小球
+        for (var i = 0; i < num; i++) {
+            var bubble = new Bubble();
+            bubble.init();
+            bubble.draw();
+            aBubble.push(bubble); //每次生成新的小球,丢进数组里面
+        }
+    }
+    create(1000);
+    setInterval(function () {
+        canCon.clearRect(0, 0, w, h);//x,y,宽和高,,擦除某一矩形区域
+        for (var item of aBubble) {
+            item.move()
+        }
+ 
+    }, 1000 / 60)
+</script>
+ 
+</html>
