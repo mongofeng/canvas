@@ -33,6 +33,7 @@
       ctx.save()
 
       ctx.translate(300, 300)
+      ctx.beginPath()
       ctx.arc(0, 0, 296, 0, 2 * pi)
       ctx.stroke()
       ctx.closePath()
@@ -55,6 +56,7 @@
         ctx.restore();
     }
 
+  
     /*绘制时针、或分针、或秒针
      * 参数1：要绘制的针的角度
      * 参数2：要绘制的针的长度
@@ -68,9 +70,9 @@
        ctx.translate(300, 300)
        ctx.rotate(-pi/2 + angle)
        ctx.beginPath()
-       ctx.moveTo(-4, 0)
+       ctx.moveTo(-40, 0)
        ctx.lineTo(len, 0)
-       ctx.lineWeight = width
+       ctx.lineWidth = width
        ctx.strokeStyle = color
        ctx.lineCap = 'round'
        ctx.stroke()
@@ -89,19 +91,19 @@
        let pi = Math.PI
 
        let secondAngle = 2 * pi * s / 60
-       let minuteAngle = 2 * pi * m / 60 + secondAngle / 60
-       let hourAngle = 2 * pi * h / 24 + minuteAngle / 60
+       let minuteAngle = 2 * pi * (m + s / 60) / 60
+       let hourAngle = 2 * pi * (h + m / 60) / 12
 
-      drawHand(hourAngle, 160, 20, "red", ctx);  //绘制时针
-      drawHand(minuteAngle, 206, 15, "green", ctx);  //绘制分针
-      drawHand(secondAngle, 229, 10, "blue", ctx);  //绘制秒针
+      drawHand(hourAngle, 160, 10, "red", ctx);  //绘制时针
+      drawHand(minuteAngle, 200, 8, "green", ctx);  //绘制分针
+      drawHand(secondAngle, 230, 5, "blue", ctx);  //绘制秒针
      }
 
      function draw(ctx){
         requestAnimationFrame(function step(){
     
           drawDial(ctx)
-            // drawAllHands(ctx); //绘制时分秒针
+            drawAllHands(ctx); //绘制时分秒针
             requestAnimationFrame(step);
         });
     }
