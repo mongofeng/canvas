@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <canvas id="canvas" width="500" height="500">
+    您的浏览器不支持 HTML5 canvas 标签。
+  </canvas>
+  <script>
+    var canvas = document.querySelector('#canvas')
+    var ctx = canvas.getContext('2d')
+    let width = canvas.width
+    let height = canvas.height
+
+
+    const wave1 = {
+      colors: ['#F39C6B', '#A0563B'], // 波浪颜色
+      waveWidth: 0.055, // 波浪宽度,数越小越宽
+      waveHeight: 4, // 波浪高度,数越大越高
+      xOffset: 0, // 初始偏移
+      speed: 0.04, // 速度
+    }
+
+    let rangeValue = 0.6; // 水位数值
+    let nowRange = 0; // 初始水位
+
+    const wave2 = {
+      colors: ['rgba(243, 156, 107, 0.48)', 'rgba(160, 86, 59, 0.48)'], // 波浪颜色
+      waveWidth: 0.04, // 波浪宽度,数越小越宽
+      waveHeight: 3, // 波浪高度,数越大越高
+      xOffset: 2, // 初始偏移
+      speed: 0.02, // 速度
+    }
+
+    let isDrawContainer = false
+
+    init()
+
+
+    function init () {
+      // 升高水位
+      if (nowRange < rangeValue) {
+        nowRange += 0.01;
+      }
+
+      ctx.clearRect(0, 0, width, height)
+      if (!isDrawContainer) {
+        console.log('由于clip的缘故，画圆不会被清空')
+        drawCirle()
+      }
+
+      draw(wave1.waveWidth, wave1.waveHeight, wave1.xOffset, wave1.colors)
+      draw(wave2.waveWidth, wave2.waveHeight, wave2.xOffset, wave2.colors)
+
+      wave1.xOffset += wave1.speed
+      wave2.xOffset += wave2.speed
+      requestAnimationFrame(init)
+    }
+
+    function drawCirle () {
+      ctx.save()
+      ctx.translate(width / 2, height /2)
+      ctx.beginPath()
+      const lineWidth = 5
+      ctx.arc(0, 0, (width / 2) - 4, 0, 2 * Math.PI)
+      ctx.lineWidth = lineWidth
+      ctx.stroke()
+      ctx.restore()
+      ctx.clip()
+      isDrawContainer = true
+    }
+
+    function draw (waveWidth, waveHeight, xOffset, colors) {
+      let point = []
+      const startX = 0
+
+      ctx.beginPath()
+      // y = a * sin(bx + c)
+      for (let x = startX ; x < startX + width ; x += 20 / width) {
+        let y = waveHeight * Math.sin(waveWidth * (x +  startX) + xOffset)
+
+        let activeY = (1 - nowRange) * height + y
+        ctx.lineTo(x, activeY)
+        point.push({
+          x,
+          y: activeY
+        })
+      }
+      ctx.lineTo(width, height)
+      ctx.lineTo(startX, height)
+      let {x, y} = point[0]
+      ctx.lineTo(x, y)
+
+      const radius = width / 2;
+      const grd = ctx.createLinearGradient(radius, radius, radius, height);
+      grd.addColorStop(0, colors[0]);
+      grd.addColorStop(1, colors[1]);
+      ctx.fillStyle = grd;
+      ctx.fill()
+    }
+    
+  </script>
+</body>
+</html>
